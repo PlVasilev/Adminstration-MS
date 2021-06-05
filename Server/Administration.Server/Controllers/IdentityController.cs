@@ -12,11 +12,11 @@
     using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
 
+
     public class IdentityController : ApiController
     {
         private readonly UserManager<User> _userManager;
         private readonly AppSettings _appSettings;
-
 
         public IdentityController(UserManager<User> userManager, IOptions<AppSettings> appSettings)
         {
@@ -24,6 +24,7 @@
             _appSettings = appSettings.Value;
         }
 
+        [Route(nameof(Register))]
         public async Task<ActionResult> Register(RegisterUserRequestModel model)
         {
             var user = new User
@@ -35,12 +36,13 @@
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                return Ok(); 
+                return Ok();
             }
 
             return BadRequest(result.Errors);
         }
 
+        [Route(nameof(Login))]
         public async Task<ActionResult<string>> Login(LoginUserRequestModel model)
         {
             var user = await _userManager.FindByNameAsync(model.Username);
@@ -57,10 +59,11 @@
 
         public string GenerateJwtToken(User user)
         {
-            
+
             // generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var key = Encoding.UTF8.GetBytes(_appSettings.Secret);
+            // var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),

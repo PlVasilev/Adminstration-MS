@@ -1,4 +1,5 @@
 using System.Text;
+using Administration.Server.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -28,9 +29,19 @@ namespace Administration.Server
             services.AddDbContext<AdministrationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<User>()
+            services.AddDefaultIdentity<User>(options =>
+                {
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequiredLength = 3;
+                    options.Password.RequiredUniqueChars = 0;
+                })
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AdministrationDbContext>();
+
+            
 
             var appSettingsConfiguration = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsConfiguration);
@@ -64,7 +75,7 @@ namespace Administration.Server
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+              app.UseDeveloperExceptionPage();
             }
             app.UseRouting();
             app.UseCors(x => x
@@ -79,6 +90,8 @@ namespace Administration.Server
             {
                 endpoints.MapControllers();
             });
+
+            app.ApplyMigrations();
         }
     }
 }
