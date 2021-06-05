@@ -1,19 +1,15 @@
-using System.Text;
-using Administration.Server.Infrastructure;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+
 
 namespace Administration.Server
 {
-    using Data.Models;
     using Data;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Infrastructure;
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -27,71 +23,27 @@ namespace Administration.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AdministrationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddDefaultIdentity<User>(options =>
-                {
-                    options.Password.RequireDigit = false;
-                    options.Password.RequireLowercase = false;
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequireUppercase = false;
-                    options.Password.RequiredLength = 3;
-                    options.Password.RequiredUniqueChars = 0;
-                })
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<AdministrationDbContext>();
-
-            
-
-            var appSettingsConfiguration = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsConfiguration);
-
-            var appSettings = appSettingsConfiguration.Get<AppSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-
-            services.AddAuthentication(x =>
-                {
-                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(x =>
-                {
-                    x.RequireHttpsMetadata = false;
-                    x.SaveToken = true;
-                    x.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(key),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
-                });
-
-            services.AddControllers();
+                    options.UseSqlServer(Configuration.GetDefaultConnectionString()))
+                .AddIdentity()
+                .AddJwtAuthentication(services.GetAppSettings(Configuration))
+                .AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
-            {
-              app.UseDeveloperExceptionPage();
-            }
-            app.UseRouting();
-            app.UseCors(x => x
+                app.UseDeveloperExceptionPage();
+            
+            app.UseRouting()
+                .UseCors(x => x
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
-                .AllowAnyHeader());
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-
-            app.ApplyMigrations();
+                .AllowAnyHeader())
+                .UseAuthentication()
+                .UseAuthorization()
+                .UseEndpoints(endpoints => { endpoints.MapControllers(); })
+                .ApplyMigrations();
         }
     }
 }
