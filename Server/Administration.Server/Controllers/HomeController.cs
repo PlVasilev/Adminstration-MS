@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-
-namespace Administration.Server.Controllers
+﻿namespace Administration.Server.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Authorization;
 
     public class HomeController : ApiController
     {
