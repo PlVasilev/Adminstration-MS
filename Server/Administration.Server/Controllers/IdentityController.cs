@@ -43,7 +43,7 @@
         }
 
         [Route(nameof(Login))]
-        public async Task<ActionResult<string>> Login(LoginUserRequestModel model)
+        public async Task<ActionResult<object>> Login(LoginUserRequestModel model)
         {
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user == null)
@@ -57,7 +57,7 @@
             return GenerateJwtToken(user);
         }
 
-        public string GenerateJwtToken(User user)
+        public object GenerateJwtToken(User user)
         {
 
             // generate token that is valid for 7 days
@@ -71,7 +71,9 @@
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            var encryptedToken = tokenHandler.WriteToken(token);
+
+            return new {Token = encryptedToken};
         }
     }
 }
