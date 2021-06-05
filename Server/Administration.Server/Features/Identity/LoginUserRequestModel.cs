@@ -1,6 +1,7 @@
-﻿namespace Administration.Server.Models.Identity
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Administration.Server.Features.Identity
 {
-    using System.ComponentModel.DataAnnotations;
     public class LoginUserRequestModel
     {
         [Required]

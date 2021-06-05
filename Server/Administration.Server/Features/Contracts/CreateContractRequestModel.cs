@@ -1,4 +1,4 @@
-﻿namespace Administration.Server.Models.Contracts
+﻿namespace Administration.Server.Features.Contracts
 {
     using System.ComponentModel.DataAnnotations;
     public class CreateContractRequestModel

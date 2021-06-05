@@ -1,14 +1,29 @@
-﻿namespace Administration.Server.Infrastructure
+﻿using Microsoft.OpenApi.Models;
+
+namespace Administration.Server.Infrastructure
 {
     using System.Text;
     using Data;
-    using Administration.Server.Data.Models;
+    using Data.Models;
+    using Features.Contracts;
+    using Features.Identity;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
     public static class ServiceCollectionExtensions
     {
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services) =>
+            services
+                .AddTransient<IIdentityService, IdentityService>()
+                .AddTransient<IContractsService, ContractsService>();
+
+        public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration) =>
+            services.AddDbContext<AdministrationDbContext>(options =>
+                options.UseSqlServer(configuration.GetDefaultConnectionString()));
+
         public static IServiceCollection AddIdentity(this IServiceCollection services)
         {
             services.AddDefaultIdentity<User>(options =>
@@ -49,5 +64,20 @@
                 });
             return services;
         }
+
+        public static AppSettings GetAppSettings(this IServiceCollection services, IConfiguration configuration)
+        {
+            var appSettingsConfiguration = configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsConfiguration);
+            var appSettings = appSettingsConfiguration.Get<AppSettings>();
+            return appSettings;
+        }
+
+        public static IServiceCollection AddSwagger(this IServiceCollection services) =>
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My Administration API", Version = "v1" });
+            });
+        
     }
 }

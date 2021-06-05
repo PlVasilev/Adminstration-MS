@@ -10,6 +10,8 @@
         {
         }
 
+        public DbSet<Contract> Contracts { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder

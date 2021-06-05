@@ -1,4 +1,4 @@
-﻿namespace Administration.Server.Models.Identity
+﻿namespace Administration.Server.Features.Identity
 {
     using System.ComponentModel.DataAnnotations;
     public class RegisterUserRequestModel

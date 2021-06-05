@@ -1,11 +1,9 @@
-﻿namespace Administration.Server.Controllers
+﻿namespace Administration.Server.Features
 {
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Authorization;
-
     public class HomeController : ApiController
     {
-        [Authorize]
+        [HttpGet]
         public IActionResult Get()
         {
             return Ok("Works");
