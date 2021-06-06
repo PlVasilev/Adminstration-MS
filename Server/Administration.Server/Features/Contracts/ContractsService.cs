@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-
-namespace Administration.Server.Features.Contracts
+﻿namespace Administration.Server.Features.Contracts
 {
     using System;
     using System.Threading.Tasks;
     using Data;
     using Data.Models;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Microsoft.EntityFrameworkCore;
     public class ContractsService : IContractsService
     {
         private readonly AdministrationDbContext _data;
@@ -31,6 +30,20 @@ namespace Administration.Server.Features.Contracts
             await _data.SaveChangesAsync();
 
             return contract.Id;
+        }
+
+        public async Task<bool> Update(string id, string type, string contractor, string description, string userId)
+        {
+            var contract = await _data.Contracts.FirstOrDefaultAsync(x => x.UserId == userId && x.Id == id);
+
+            if (contract == null) return false;
+
+            contract.Type = type;
+            contract.Contractor = contractor;
+            contract.Description = description;
+
+            await _data.SaveChangesAsync();
+            return true;
         }
 
         public async Task<IEnumerable<GetContractsResponseModel>> Mine(string userId) =>
@@ -58,7 +71,14 @@ namespace Administration.Server.Features.Contracts
                      Type = contract.Type
                  }).FirstOrDefaultAsync();
 
+        public async Task<bool> Delete(string id, string userId)
+        {
+            var contract = await _data.Contracts.FirstOrDefaultAsync(x => x.UserId == userId && x.Id == id);
+            if (contract == null) return false;
 
-
+            _data.Remove(contract);
+            await _data.SaveChangesAsync();
+            return true;
+        }
     }
 }
