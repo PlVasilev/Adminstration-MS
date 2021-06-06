@@ -15,7 +15,9 @@ import { TokenInterceptor } from './services/token-interceptor.service';
 import { ListContractsComponent } from './list-contracts/list-contracts.component';
 import { DetailsContractsComponent } from './details-contracts/details-contracts.component';
 import { EditContractComponent } from './edit-contract/edit-contract.component';
-
+import { ErrorInterceptorService } from './services/error-interceptor.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -32,17 +34,23 @@ import { EditContractComponent } from './edit-contract/edit-contract.component';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
   providers: [
-    AuthService, 
-    ContractService, 
-    AuthGuardService, 
+    AuthService,
+    ContractService,
+    AuthGuardService,
     {
-    provide: HTTP_INTERCEPTORS,
-    useClass: TokenInterceptor,
-    multi: true
-  }],
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }, {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptorService,
+      multi: true
+    }],
   schemas: [NO_ERRORS_SCHEMA],
   bootstrap: [AppComponent]
 })
