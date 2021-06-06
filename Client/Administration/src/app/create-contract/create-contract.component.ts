@@ -26,7 +26,7 @@ export class CreateContractComponent implements OnInit {
 
   create(){
     console.log(this.contractForm.value);
-    this.contractService.createContract(this.contractForm.value).subscribe( data =>{
+    this.contractService.create(this.contractForm.value).subscribe( data =>{
       console.log(data)
     })
   }

@@ -14,6 +14,7 @@ import { AuthGuardService } from './services/auth-guard.service';
 import { TokenInterceptor } from './services/token-interceptor.service';
 import { ListContractsComponent } from './list-contracts/list-contracts.component';
 import { DetailsContractsComponent } from './details-contracts/details-contracts.component';
+import { EditContractComponent } from './edit-contract/edit-contract.component';
 
 
 
@@ -24,7 +25,8 @@ import { DetailsContractsComponent } from './details-contracts/details-contracts
     RegisterComponent,
     CreateContractComponent,
     ListContractsComponent,
-    DetailsContractsComponent
+    DetailsContractsComponent,
+    EditContractComponent
   ],
   imports: [
     BrowserModule,

@@ -13,15 +13,16 @@ export class ContractService {
   private createPath = environment.apiUrl + "/Contracts/Create"
   private minePath = environment.apiUrl + "/Contracts/Mine"
   private dtailsPath = environment.apiUrl + "/Contracts"
+  private editPath = environment.apiUrl + "/Contracts/Update"
 
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
-  createContract(data: any): Observable<Contract>{
+  create(data: any): Observable<Contract>{
     return this.http.post<Contract>(this.createPath,data)
   }
 
-  mineContracts(): Observable<Array<Contract>>{
+  mine(): Observable<Array<Contract>>{
     return this.http.get<Array<Contract>>(this.minePath)
   }
 
@@ -31,5 +32,9 @@ export class ContractService {
 
   delete(id: any): Observable<any>{
     return this.http.delete(this.dtailsPath + `/${id}`)
+  }
+
+  edit(data: any) : Observable<Contract>{
+    return this.http.put<Contract>(this.editPath,data)
   }
 }

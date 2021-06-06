@@ -6,6 +6,7 @@
                   <h5 class="card-title">{{contract.contractor}}</h5>
                   <h6 class="card-subtitle mb-2 text-muted">{{contract.type}}</h6>
                   <a routerLink="/contracts/{{contract.id}}" class="btn btn-primary">Details</a>
+                  <button class="btn btn-warning" (click)="edit(contract.id)">Edit</button>
                   <button class="btn btn-danger" (click)="delete(contract.id)">Delete</button>
                 </div>
               </div>

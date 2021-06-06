@@ -17,7 +17,7 @@ export class ListContractsComponent implements OnInit {
     this.getCats();
   }
   getCats(){
-    this.contractService.mineContracts().subscribe(contracts => {
+    this.contractService.mine().subscribe(contracts => {
       this.contracts = contracts;
       console.log(this.contracts);
     })
@@ -30,5 +30,9 @@ export class ListContractsComponent implements OnInit {
       this.getCats();
     })
   }
+
+  edit(id: any) {
+      this.router.navigate(["/contracts/" + id + "/edit"])
+    } 
 
 }

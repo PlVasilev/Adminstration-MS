@@ -1,0 +1,34 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+            <form [formGroup]="editForm" (ngSubmit)="edit()">
+                <div class="mb-3">
+                  <label for="type" class="form-label">Type</label>
+                  <input type="text" class="form-control"  formControlName="type" >
+                </div>
+                <div *ngIf="type?.touched && type?.errors" class="alert alert-danger">
+                    Type is required
+                </div>
+
+                <div class="mb-3">
+                  <label for="contractor" class="form-label">Contractor</label>
+                  <input type="text" class="form-control" formControlName="contractor">
+                </div>
+                <div *ngIf="contractor?.touched && contractor?.errors" class="alert alert-danger">
+                    Contractor is required
+              </div>
+
+              <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" rows="3" formControlName="description"></textarea>
+              </div>
+              <div *ngIf="description?.touched && description?.errors" class="alert alert-danger">
+                Desription is required
+            </div>
+                <button type="submit" class="btn btn-primary">Edit</button>
+              </form>
+        </div>
+        <div class="col-lg-4"></div>
+    </div>
+</div>
