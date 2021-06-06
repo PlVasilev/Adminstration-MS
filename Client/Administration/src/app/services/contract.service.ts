@@ -11,13 +11,25 @@ import { AuthService } from './auth.service';
 export class ContractService {
 
   private createPath = environment.apiUrl + "/Contracts/Create"
+  private minePath = environment.apiUrl + "/Contracts/Mine"
+  private dtailsPath = environment.apiUrl + "/Contracts"
 
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
   createContract(data: any): Observable<Contract>{
-   // let headers = new HttpHeaders();
-   // headers = headers.set('Authorization', `Bearer ${ this.authService.getToken()}`)
     return this.http.post<Contract>(this.createPath,data)
+  }
+
+  mineContracts(): Observable<Array<Contract>>{
+    return this.http.get<Array<Contract>>(this.minePath)
+  }
+
+  details(id: any): Observable<Contract>{
+    return this.http.get<Contract>(this.dtailsPath + `/${id}`)
+  }
+
+  delete(id: any): Observable<any>{
+    return this.http.delete(this.dtailsPath + `/${id}`)
   }
 }

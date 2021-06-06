@@ -1,6 +1,7 @@
 export interface Contract {
-    Id: string,
-    Type: string,
-    Contractor: string,
-    Description: string
+    id: string,
+    type: string,
+    contractor: string,
+    description: string,
+    creatorName: string
 }

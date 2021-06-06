@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -12,6 +12,8 @@ import { CreateContractComponent } from './create-contract/create-contract.compo
 import { ContractService } from './services/contract.service';
 import { AuthGuardService } from './services/auth-guard.service';
 import { TokenInterceptor } from './services/token-interceptor.service';
+import { ListContractsComponent } from './list-contracts/list-contracts.component';
+import { DetailsContractsComponent } from './details-contracts/details-contracts.component';
 
 
 
@@ -20,13 +22,15 @@ import { TokenInterceptor } from './services/token-interceptor.service';
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    CreateContractComponent
+    CreateContractComponent,
+    ListContractsComponent,
+    DetailsContractsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule,
+    HttpClientModule
   ],
   providers: [
     AuthService, 
@@ -37,6 +41,7 @@ import { TokenInterceptor } from './services/token-interceptor.service';
     useClass: TokenInterceptor,
     multi: true
   }],
+  schemas: [NO_ERRORS_SCHEMA],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
