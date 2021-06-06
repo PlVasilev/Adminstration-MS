@@ -16,8 +16,8 @@ export class ContractService {
   constructor(private http: HttpClient, private authService: AuthService) { }
 
   createContract(data: any): Observable<Contract>{
-    let headers = new HttpHeaders();
-    headers = headers.set('Authorization', `Bearer ${ this.authService.getToken()}`)
-    return this.http.post<Contract>(this.createPath,data , {headers})
+   // let headers = new HttpHeaders();
+   // headers = headers.set('Authorization', `Bearer ${ this.authService.getToken()}`)
+    return this.http.post<Contract>(this.createPath,data)
   }
 }
