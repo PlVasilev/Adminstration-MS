@@ -1,4 +1,8 @@
-﻿namespace Administration.Server.Features.Contracts
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+
+namespace Administration.Server.Features.Contracts
 {
     using System;
     using System.Threading.Tasks;
@@ -28,5 +32,33 @@
 
             return contract.Id;
         }
+
+        public async Task<IEnumerable<GetContractsResponseModel>> Mine(string userId) =>
+            await _data
+                .Contracts
+                .Where(x => x.UserId == userId)
+                .Select(x => new GetContractsResponseModel
+                {
+                    Id = x.Id,
+                    Contractor = x.Contractor,
+                    Type = x.Type
+                })
+                .ToListAsync();
+
+        public async Task<GetContractDetailsResponseModel> Details(string id) =>
+            await _data.Contracts
+                .Include(x => x.User)
+                .Where(x => x.Id == id)
+                .Select(contract => new GetContractDetailsResponseModel
+                 {
+                     Id = contract.Id,
+                     Contractor = contract.Contractor,
+                     CreatorName = contract.User.UserName,
+                     Description = contract.Description,
+                     Type = contract.Type
+                 }).FirstOrDefaultAsync();
+
+
+
     }
 }
