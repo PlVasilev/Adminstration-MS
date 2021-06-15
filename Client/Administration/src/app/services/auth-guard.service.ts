@@ -8,11 +8,30 @@ import { AuthService } from './auth.service';
 })
 export class AuthGuardService implements CanActivate {
 
+  isLogged = false;
+  isAdmin = false;
+
   constructor(private authService: AuthService, private router: Router) { }
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-    if(this.authService.isAutheticated()){
+    if (this.authService.isAutheticated()) {
+      this.isLogged = true;
+      if (this.authService.isAdmin()) {
+        this.isAdmin = true;
+      }
+    }
+
+    if (this.isLogged === route.data.isLogged) {
       return true;
-    }else{
+    }
+    else if (this.isAdmin === route.data.isAdmin) {
+      return true;
+    }
+    else {
+      if(this.isLogged == true){
+        console.log(this.isLogged);
+        this.router.navigate(['/register'])
+        return false;
+      }
       this.router.navigate(['/login'])
       return false;
     }

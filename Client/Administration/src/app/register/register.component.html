@@ -24,6 +24,13 @@
         <div *ngIf="password?.touched && password?.errors" class="alert alert-danger">
           Password is required
         </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">RePassword</label>
+          <input type="password" class="form-control" formControlName="confirmPassword">
+        </div>
+        <div *ngIf="confirmPassword?.touched && confirmPassword?.errors" class="alert alert-danger">
+          Confirm Password is Required and Must match the password
+        </div>
         <button type="submit" class="btn btn-primary">Register</button>
       </form>
     </div>

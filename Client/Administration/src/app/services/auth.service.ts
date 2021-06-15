@@ -25,7 +25,17 @@ private registerPath = environment.apiUrl + "/identity/register"
   }
 
   getToken(){
-    return localStorage.getItem('token')
+    let token  = localStorage.getItem('token');
+    if(token == null){
+     return "";
+    }
+    return token;
+  }
+
+  isAdmin(){
+    let token = this.getToken();
+    let roles = JSON.parse(window.atob(token.split('.')[1])).role;
+    return roles.includes('Admin');
   }
 
   isAutheticated(){

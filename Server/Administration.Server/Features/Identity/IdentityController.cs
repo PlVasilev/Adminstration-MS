@@ -1,4 +1,6 @@
-﻿namespace Administration.Server.Features.Identity
+﻿using System.Linq;
+
+namespace Administration.Server.Features.Identity
 {
     using System.Threading.Tasks;
     using Data.Models;
@@ -31,6 +33,14 @@
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (_userManager.Users.Count() == 1)
+            {
+                await _userManager.AddToRoleAsync(user, "Admin");
+            }
+
+            await _userManager.AddToRoleAsync(user, "User");
+
             if (result.Succeeded) return Ok();
             
             return BadRequest(result.Errors);
@@ -46,7 +56,9 @@
             var passwordValid = _userManager.CheckPasswordAsync(user, model.Password);
             if (passwordValid == null) return Unauthorized();
 
-            return _identityService.GenerateJwtToken(user.Id, user.UserName, _appSettings.Secret);
+            var roles = await this._userManager.GetRolesAsync(user);
+
+            return _identityService.GenerateJwtToken(user.Id, user.UserName, _appSettings.Secret, roles);
         }
     }
 }

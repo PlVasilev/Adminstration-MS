@@ -41,7 +41,9 @@ namespace Administration.Server
                 .UseAuthentication()
                 .UseAuthorization()
                 .UseEndpoints(endpoints => { endpoints.MapControllers(); })
-                .ApplyMigrations();
+                .ApplyMigrations()
+                .ApplyRoles();
+               
 
         }
     }
