@@ -1,4 +1,4 @@
-﻿namespace Administration.Server.Features.Contracts
+﻿namespace Administration.Server.Features.Contracts.Models
 {
     public class GetContractDetailsResponseModel
     {

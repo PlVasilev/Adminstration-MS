@@ -1,4 +1,5 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using AutoMapper;
+using Microsoft.OpenApi.Models;
 
 namespace Administration.Server.Infrastructure
 {
@@ -19,6 +20,7 @@ namespace Administration.Server.Infrastructure
             services
                 .AddTransient<IIdentityService, IdentityService>()
                 .AddTransient<IContractsService, ContractsService>();
+               
 
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration) =>
             services.AddDbContext<AdministrationDbContext>(options =>

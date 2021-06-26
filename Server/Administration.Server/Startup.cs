@@ -1,3 +1,8 @@
+using System.Reflection;
+using Administration.Server.Data.Models;
+using Administration.Server.Features.Contracts.Models;
+using Administration.Server.Infrastructure.Mapping;
+
 namespace Administration.Server
 {
     using Microsoft.AspNetCore.Builder;
@@ -28,6 +33,7 @@ namespace Administration.Server
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            AutoMapperConfig.RegisterMappings(typeof(ContractServiceModel).GetTypeInfo().Assembly);
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
 

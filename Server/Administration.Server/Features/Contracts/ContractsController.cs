@@ -1,4 +1,7 @@
-﻿namespace Administration.Server.Features.Contracts
+﻿using Administration.Server.Features.Contracts.Models;
+using AutoMapper;
+
+namespace Administration.Server.Features.Contracts
 {
     using System.Threading.Tasks;
     using Infrastructure;
@@ -10,10 +13,12 @@
     public class ContractsController : ApiController
     {
         private readonly IContractsService _contractsService;
+        private readonly IMapper _mapper;
 
-        public ContractsController(IContractsService contractsService)
+        public ContractsController(IContractsService contractsService, IMapper mapper)
         {
             _contractsService = contractsService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -62,7 +67,9 @@
         public async Task<ActionResult> Create(CreateContractRequestModel model)
         {
             var userId = this.User.GetId();
-            var contractId = await _contractsService.Create(model.Type, model.Contractor, model.Description, userId);
+            var contract = _mapper.Map<ContractServiceModel>(model);
+            contract.UserId = userId;
+            var contractId = await _contractsService.Create(contract);
 
             return Created(nameof(this.Create), contractId);
         }

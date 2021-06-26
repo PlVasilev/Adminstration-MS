@@ -1,10 +1,9 @@
-﻿namespace Administration.Server.Features.Contracts
+﻿namespace Administration.Server.Features.Contracts.Models
 {
+    using Infrastructure.Mapping;
     using System.ComponentModel.DataAnnotations;
-    public class UpdateContractRequestModel
+    public class CreateContractRequestModel : IMapFrom<ContractServiceModel>, IMapTo<ContractServiceModel>
     {
-        public string Id { get; set; }
-
         [Required]
         public string Type { get; set; }
 
@@ -14,5 +13,6 @@
         [Required]
         [MaxLength(1000)]
         public string Description { get; set; }
+
     }
 }

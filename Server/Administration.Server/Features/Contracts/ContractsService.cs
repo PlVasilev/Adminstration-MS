@@ -1,4 +1,7 @@
-﻿namespace Administration.Server.Features.Contracts
+﻿using Administration.Server.Features.Contracts.Models;
+using AutoMapper;
+
+namespace Administration.Server.Features.Contracts
 {
     using System;
     using System.Threading.Tasks;
@@ -10,22 +13,20 @@
     public class ContractsService : IContractsService
     {
         private readonly AdministrationDbContext _data;
+        private readonly IMapper _mapper;
         public ContractsService(AdministrationDbContext data)
         {
             _data = data;
+          //  _mapper = mapper;
         }
 
-        public async Task<string> Create(string type, string contractor, string description, string userId)
+        public async Task<string> Create(ContractServiceModel model)
         {
-            var contract = new Contract
-            {
-                Id = Guid.NewGuid().ToString(),
-                Contractor = contractor,
-                Description = description,
-                Type = type,
-                UserId = userId
-            };
+            model.Id = Guid.NewGuid().ToString();
+            var contract = _mapper.Map<Contract>(model);
 
+             // var contract = new Contract();
+           
             _data.Contracts.Add(contract);
             await _data.SaveChangesAsync();
 
@@ -63,13 +64,13 @@
                 .Include(x => x.User)
                 .Where(x => x.Id == id)
                 .Select(contract => new GetContractDetailsResponseModel
-                 {
-                     Id = contract.Id,
-                     Contractor = contract.Contractor,
-                     CreatorName = contract.User.UserName,
-                     Description = contract.Description,
-                     Type = contract.Type
-                 }).FirstOrDefaultAsync();
+                {
+                    Id = contract.Id,
+                    Contractor = contract.Contractor,
+                    CreatorName = contract.User.UserName,
+                    Description = contract.Description,
+                    Type = contract.Type
+                }).FirstOrDefaultAsync();
 
         public async Task<bool> Delete(string id, string userId)
         {

@@ -1,15 +1,22 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Identity;
-
-namespace Administration.Server.Infrastructure
+﻿namespace Administration.Server.Infrastructure
 {
     using Data;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
+    using System.Linq;
+    using Microsoft.AspNetCore.Identity;
+    using Data.Models;
+    using Mapping;
 
     public static class ApplicationBuilderExtensions
     {
+        public static IApplicationBuilder AddAutoMapper(this IApplicationBuilder app)
+        {
+            AutoMapperConfig.RegisterMappings(typeof(Contract).Assembly);
+            return app;
+        }
+
         public static IApplicationBuilder AddSwaggerUI(this IApplicationBuilder app) =>
             app
                 .UseSwagger()
@@ -34,7 +41,7 @@ namespace Administration.Server.Infrastructure
         {
             using var services = app.ApplicationServices.CreateScope();
             var context = services.ServiceProvider.GetRequiredService<AdministrationDbContext>();
-
+            
             if (context.Roles.Count() <= 1)
             {
                 context.Roles.Add(new IdentityRole() { Name = "Admin", NormalizedName = "ADMIN" });
