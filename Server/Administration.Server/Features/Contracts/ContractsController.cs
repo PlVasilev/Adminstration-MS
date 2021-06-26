@@ -15,10 +15,12 @@ namespace Administration.Server.Features.Contracts
         private readonly IContractsService _contractsService;
         private readonly IMapper _mapper;
 
+
         public ContractsController(IContractsService contractsService, IMapper mapper)
         {
             _contractsService = contractsService;
             _mapper = mapper;
+
         }
 
         [HttpGet]
@@ -68,6 +70,7 @@ namespace Administration.Server.Features.Contracts
         {
             var userId = this.User.GetId();
             var contract = _mapper.Map<ContractServiceModel>(model);
+
             contract.UserId = userId;
             var contractId = await _contractsService.Create(contract);
 

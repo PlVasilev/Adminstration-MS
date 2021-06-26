@@ -11,11 +11,6 @@
 
     public static class ApplicationBuilderExtensions
     {
-        public static IApplicationBuilder AddAutoMapper(this IApplicationBuilder app)
-        {
-            AutoMapperConfig.RegisterMappings(typeof(Contract).Assembly);
-            return app;
-        }
 
         public static IApplicationBuilder AddSwaggerUI(this IApplicationBuilder app) =>
             app

@@ -1,7 +1,4 @@
-﻿using Administration.Server.Features.Contracts.Models;
-using AutoMapper;
-
-namespace Administration.Server.Features.Contracts
+﻿namespace Administration.Server.Features.Contracts
 {
     using System;
     using System.Threading.Tasks;
@@ -10,14 +7,18 @@ namespace Administration.Server.Features.Contracts
     using System.Collections.Generic;
     using System.Linq;
     using Microsoft.EntityFrameworkCore;
+    using Models;
+    using AutoMapper;
     public class ContractsService : IContractsService
     {
         private readonly AdministrationDbContext _data;
         private readonly IMapper _mapper;
-        public ContractsService(AdministrationDbContext data)
+  
+        public ContractsService(AdministrationDbContext data, IMapper mapper)
         {
             _data = data;
-          //  _mapper = mapper;
+            _mapper = mapper;
+        
         }
 
         public async Task<string> Create(ContractServiceModel model)
@@ -25,9 +26,9 @@ namespace Administration.Server.Features.Contracts
             model.Id = Guid.NewGuid().ToString();
             var contract = _mapper.Map<Contract>(model);
 
-             // var contract = new Contract();
-           
-            _data.Contracts.Add(contract);
+             // var contract = new Contract()
+             
+             _data.Contracts.Add(contract);
             await _data.SaveChangesAsync();
 
             return contract.Id;

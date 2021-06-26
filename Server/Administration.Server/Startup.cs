@@ -28,6 +28,7 @@ namespace Administration.Server
                 .AddControllers(options =>
                     options.Filters.Add<ModelOrNotFoundActionFilter>());
 
+            services.AddAutoMapper(typeof(ContractServiceModel).GetTypeInfo().Assembly);
             services.AddSwagger();
         }
         
